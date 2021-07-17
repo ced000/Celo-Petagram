@@ -2,6 +2,7 @@ const path = require("path");
 const webpack = require("webpack");
 const FriendlyErrorsWebpackPlugin = require("friendly-errors-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+// const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
   mode: "development",
@@ -13,6 +14,16 @@ module.exports = {
     path: path.resolve(process.cwd(), "docs"),
     publicPath: ""
   },
+  module: {
+    rules: [
+      {
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader'],
+        exclude: /node_modules/,
+      },
+    ],
+  },
+
 	node: {
    fs: "empty",
 	 net: "empty"
@@ -27,6 +38,7 @@ module.exports = {
     new webpack.ProgressPlugin(),
     new HtmlWebpackPlugin({
       template: path.resolve(process.cwd(), "public", "index.html")
-    })
+    }),
+    // new MiniCssExtractPlugin(),
   ]
 }

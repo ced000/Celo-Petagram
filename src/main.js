@@ -1,236 +1,238 @@
 import Web3 from "web3";
-import { newKitFromWeb3 } from "@celo/contractkit";
+import {newKitFromWeb3} from "@celo/contractkit";
 import BigNumber from "bignumber.js";
-import marketplaceAbi from "../contract/marketplace.abi.json";
-import erc20Abi from "../contract/erc20.abi.json";
+import petagramAbi from "../contracts/petagram.abi.json";
+import erc20Abi from "../contracts/erc20.abi.json";
+import './style.css';
+
+// Creating a list of post objects...
+// const postObjectList = [
+//     {
+//         title: "Totti",
+//         imageURL: "https://source.unsplash.com/300x300/?tortoise",
+//         desc: "Slowest pet alive",
+//         likes: 20,
+//         dislikes: 10,
+//         author: "https://twitter.com/afrocryptomania"
+//     },
+//     {
+//         title: "Cathy",
+//         imageURL: "https://source.unsplash.com/300x300/?cats",
+//         desc: "Cathy, the innocent",
+//         likes: 100,
+//         dislikes: 16,
+//         author: "https://twitter.com/afrocryptomania"
+//     },
+//     {
+//         title: "Puggy",
+//         imageURL: "https://source.unsplash.com/300x300/?pugs",
+//         desc: "Puggy, the cutest",
+//         likes: 250,
+//         dislikes: 3,
+//         author: "https://twitter.com/afrocryptomania"
+//     },
+//     {
+//         title: "Pat",
+//         imageURL: "https://source.unsplash.com/300x300/?parrots",
+//         desc: "Pat, the talking companion",
+//         likes: 25,
+//         dislikes: 1,
+//         author: "https://twitter.com/afrocryptomania"
+//     }
+    // {
+    //     title: "doggy",
+    //     imageURL: "https://source.unsplash.com/300x300/?dogs",
+    //     desc: "cuteness animated",
+    //     likes: 2,
+    //     dislikes: 1,
+    //     author: "https://twitter.com/afrocryptomania"
+    // }
+// ];
 
 const ERC20_DECIMALS = 18;
-const MPContractAddress = "0x5E7a8aEE5726bAE0750258bce9cba1C33767a672";
+const petContractAddress = '0x019578A8CCBF8b9A0B115dc86aE993385314daAc';
 const cUSDContractAddress = "0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1";
 
-let kit;
+let kit; 
 let contract;
-let products = [];
+let posts = [];
 
 const connectCeloWallet = async () => {
-    if (window.celo) {
-        notification("⚠️ Please approve this Dapp to use it");
+    if(window.celo) {
+        notification("⚠️ Please approve Petagram to use it.");
         try {
             await window.celo.enable();
-            notificationOff();
-            // getting the celo kit from web3 and storing it in the global kit variable
+
             const web3 = new Web3(window.celo);
             kit = newKitFromWeb3(web3);
 
-            // getting accounts from the kit and setting default account as the first accounts in array
-            const accounts = await kit.web3.eth.getAccounts();
+            const accounts = kit.web3.eth.getAccounts();
             kit.defaultAccount = accounts[0];
 
-            // getting the contract already written and deployed on the blockchain.
-            contract = new kit.web3.eth.Contract(marketplaceAbi, MPContractAddress);
+            contract = new kit.web3.eth.Contract(petagramAbi, petContractAddress);
         } catch (error) {
             notification(`⚠️ ${error}.`);
         }
-    } else {
-        notification("⚠️ Please install the CeloExtensionWallet");
+    }else{
+        notification("⚠️ Please install the CeloExtensionWallet.");
     }
 }
-
-const approve = async (_price) => {
-    const cUSDContract = new kit.web3.eth.Contract(erc20Abi, cUSDContractAddress);
-
-    const result = await cUSDContract.methods.approve(MPContractAddress, _price).send({from: kit.defaultAccount});
-    return result;
-}
-// const products = [
-//     {
-//         name: "Giant BBQ",
-//         image: "https://i.imgur.com/yPreV19.png",
-//         description: `Grilled chicken, beef, fish, sausages, bacon, 
-//         vegetables served with chips.`,
-//         location: "Kimironko Market",
-//         owner: "0x32Be343B94f860124dC4fEe278FDCBD38C102D88",
-//         price: 3,
-//         sold: 27,
-//         index: 0,
-//     },
-//     {
-//         name: "BBQ Chicken",
-//         image: "https://i.imgur.com/NMEzoYb.png",
-//         description: `French fries and grilled chicken served with gacumbari 
-//         and avocados with cheese.`,
-//         location: "Afrika Fresh KG 541 St",
-//         owner: "0x3275B7F400cCdeBeDaf0D8A9a7C8C1aBE2d747Ea",
-//         price: 4,
-//         sold: 12,
-//         index: 1,
-//     },
-//     {
-//         name: "Beef burrito",
-//         image: "https://i.imgur.com/RNlv3S6.png",
-//         description: `Homemade tortilla with your choice of filling, cheese, 
-//         guacamole salsa with Mexican refried beans and rice.`,
-//         location: "Asili - KN 4 St",
-//         owner: "0x2EF48F32eB0AEB90778A2170a0558A941b72BFFb",
-//         price: 2,
-//         sold: 35,
-//         index: 2,
-//     },
-//     {
-//         name: "Barbecue Pizza",
-//         image: "https://i.imgur.com/fpiDeFd.png",
-//         description: `Barbecue Chicken Pizza: Chicken, gouda, pineapple, onions 
-//         and house-made BBQ sauce.`,
-//         location: "Kigali Hut KG 7 Ave",
-//         owner: "0x2EF48F32eB0AEB90778A2170a0558A941b72BFFb",
-//         price: 1,
-//         sold: 2,
-//         index: 3,
-//     }
-// ]
 
 const getBalance = async () => {
     const totalBalance = await kit.getTotalBalance(kit.defaultAccount);
     const cUSDBalance = totalBalance.cUSD.shiftedBy(-ERC20_DECIMALS).toFixed(2);
-    document.querySelector("#balance").textContent = cUSDBalance;
-};
-
-const getProducts = async () => {
-    const _productsLength = await contract.methods.getProductsLength().call();
-    const _products = [];
-
-    for(let i = 0; i < _productsLength; i++) {
-        let _product = new Promise(async (resolve, reject) => {
-            let p = await contract.methods.readProduct(i).call();
-            resolve({
-                index: i,
-                owner: p[0],
-                name: p[1],
-                image: p[2],
-                description: p[3],
-                location: p[4],
-                price: new BigNumber(p[5]),
-                sold: p[6]
-            })
-        })
-        _products.push(_product);
-    }
-    products = await Promise.all(_products);
-    renderProducts();
+    document.querySelector('#balance').textContent = cUSDBalance;
 }
 
-function renderProducts() {
-    document.getElementById("marketplace").innerHTML = "";
-    products.forEach((_product) => {
-        const newDiv = document.createElement("div");
-        newDiv.className = "col-md-4";
-        newDiv.innerHTML = productTemplate(_product);
-        document.getElementById("marketplace").appendChild(newDiv);
+// When window loads...
+window.onload = async () => {
+    await connectCeloWallet();
+    await getBalance();
+    counter = 0;
+    renderPost();
+    postContents = slide();
+    btnCheck();
+}
+
+// getting DOM elements...
+const uploadBtn = document.getElementById('upBtn');
+const container = document.getElementById('formCont');
+const cancelBtn = document.getElementById('formCancel');
+const nextBtn = document.getElementById('nextBtn');
+const prevBtn = document.getElementById('prevBtn');
+const formUploadBtn = document.getElementById('formUpload');
+
+
+
+// handling button events...
+uploadBtn.onclick = () => {
+    container.classList.add('visible');
+};
+
+cancelBtn.onclick = () => {
+    container.classList.remove('visible')
+};
+
+const slide = () => {
+    const postSlide = document.querySelector('.post-slide')
+    const postContents = document.querySelectorAll('.post-slide .post-container');
+    const postWidth = postContents[0].clientWidth;
+    postSlide.style.transition = 'transform 0.4s ease-in-out';
+    postSlide.style.transform = 'translatex(' + (-postWidth * counter) + 'px)';
+
+    return postContents;
+}
+
+nextBtn.onclick = () => {
+    counter++;
+    btnCheck();
+    slide();
+}
+
+prevBtn.onclick = () => {
+    counter--;
+    btnCheck();
+    slide();
+}
+
+// handling button appearance...
+const btnCheck = () => {
+    if (counter <= 0) {
+        prevBtn.style.display = 'none';
+    } else if ( counter >= postContents.length-1) {
+        nextBtn.style.display = 'none';
+    } else {
+        prevBtn.style.display = 'unset';
+        nextBtn.style.display = 'unset';
+    };
+}
+
+
+// Function to render posts from list on window load...
+
+const renderPost = () => {
+    let postSlide = document.getElementById('postSlide');
+    postSlide.innerHTML = '';
+    postObjectList.forEach ((post) => {
+        newDiv = document.createElement('div');
+        newDiv.classList.add('post-container');
+        newDiv.innerHTML = `
+        <div class="post-image">
+            <img src="${post.imageURL}" alt="">
+            <h3>${post.title}</h3>
+            <p>${post.desc}</p>
+        </div>
+        <ul>
+            <li>
+                <button id = "likeBtn" onclick = upLike()>👍</button>
+                <small id = "noLikes">${post.likes}</small>
+            </li>
+            <li>
+                <button id = "dislikeBtn" onclick = upDislike() >👎</button>
+                <small id = "noDislikes">${post.dislikes}</small>
+            </li>
+            <li>
+                <button>📤</button>
+                <small>Share</small>
+            </li>
+        </ul>
+        <a href="${post.author}" target="_blank">Author</a>
+`
+    postSlide.appendChild(newDiv);
     })
 }
 
-function productTemplate(_product) {
-    return `
-    <div class= "card mb-4">
-        <img class= "card-img-top" src= "${_product.image}" alt="...">
-        <div class="position-absolute top-0 end-0 bg-warning mt-4 px-2 py-1 rounded-start">
-            ${_product.sold} Sold
-        </div>
-        <div class="card-body text-left p-4 position-relative">
-            <div class="translate-middle-y position-absolute top-0">
-                ${identiconTemplate(_product.owner)}
-            </div>
-            <h2 class="card-title fs-4 fw-bold mt-2">${_product.name}</h2>
-            <p class="card-text mb-4" style="min-height: 82px">${_product.description}</p>
-            <p class="card-text mt-4">
-                <i class="bi bi-geo-alt-fill"></i>
-                <span>${_product.location}</span>
-            </p>
-            <div class="d-grip gap-2">
-                <a class="btn btn-lg btn-outline-dark buyBtn fs-6 p-3" id=${_product.index}>
-                    Buy for ${_product.price.shiftedBy(-ERC20_DECIMALS).toFixed(2)} cUSD
-                </a>
-            </div>
-        </div>
-    </div>
-    `
+const upLike = () => {
+    noLikes = postObjectList[counter].likes;
+    noLikes += 1;
+    postObjectList[counter].likes = noLikes;
+    postContents[counter].getElementsByTagName('small')['noLikes'].innerHTML = noLikes;
 }
 
-function identiconTemplate(_address) {
-    const icon = blockies.create({
-        seed: _address,
-        size: 8,
-        scale: 16,
-    }).toDataURL()
-
-    return `
-    <div class="rounded-circle overflow-hidden d-inline-block border border-white border-2 shadow-sm m-0">
-        <a href="https://alfajores-blockscout.celo-testnet.org/address/${_address}/transactions" target="_blank">
-            <img src="${icon}" width="48" alt="${_address}"/>
-        </a>
-    </div>
-    `
+const upDislike = () => {
+    noDislikes = postObjectList[counter].dislikes;
+    noDislikes += 1;
+    postObjectList[counter].dislikes = noDislikes;
+    postContents[counter].getElementsByTagName('small')['noDislikes'].innerHTML = noDislikes;
 }
 
-function notification(_text) {
-    document.querySelector(".alert").style.display = "block";
-    document.querySelector("#notification").textContent = _text;
+
+
+const notification = (text) => {
+    const notification = document.querySelector('.notification');
+    const notLoader = document.querySelector('.not-loader');
+    document.querySelector('.not-text').innerHTML = text;
+    notification.style.transform = 'translatex(100%)';
+    notification.addEventListener('transitionend', () => {notLoader.style.transform = 'translatex(-100%)';});
+    setTimeout(() => {
+        notification.style.transform = 'translatex(-100%)';
+        notification.addEventListener('transitionend', () => {
+            notLoader.style.transform = 'unset';
+        });
+    }, 5000);
 }
 
-function notificationOff() {
-    document.querySelector(".alert").style.display = "none";
+const addProduct = () => {
+    let petPost = {};
+    let name = document.getElementById('petName').value;
+    let imgUrl = document.getElementById('imgUrl').value;
+    let desc = document.getElementById('desc').value;
+    let author = document.getElementById('authorHandle').value;
+    // filling up petPost object. 
+    petPost.title = name;
+    petPost.imageURL = imgUrl;
+    petPost.desc = desc;
+    petPost.author = author;
+    petPost.likes = 0;
+    petPost.dislikes = 0;
+
+    postObjectList.push(petPost);
+    renderPost();
+    postContents = slide();
+    btnCheck();
+    container.classList.remove('visible');
+    notification('🚀 New pet added!');
+
 }
 
-window.addEventListener("load", async () => {
-    notification("⏳ Loading...");
-    await connectCeloWallet();
-    await getBalance();
-    await getProducts();
-    //renderProducts();
-    notificationOff();
-})
-
-document.querySelector("#newProductBtn").addEventListener("click", async (e) => {
-    const params = [
-        document.getElementById("newProductName").value,
-        document.getElementById("newImgUrl").value,
-        document.getElementById("newProductDescription").value,
-        document.getElementById("newLocation").value,
-        new BigNumber(document.getElementById("newPrice").value).shiftedBy(ERC20_DECIMALS).toString()
-    ]
-
-    notification(`🎉 Adding "${params[0]}"...`);
-
-    try {
-        const result = await contract.methods
-        .writeProduct(...params)
-        .send({from: kit.defaultAccount});
-    } catch (error) {
-        notification(`⚠️ ${error}.`)
-    }
-    notification(`🎉 You successfully added "${params[0]}"`);
-    getProducts();
-})
-
-document.querySelector("#marketplace").addEventListener("click", async (e) => {
-    if (e.target.className.includes("buyBtn")) {
-        const index = e.target.id;
-        notification("⏳ Waiting for payment approval...");
-        try {
-            await approve(products[index].price);
-        } catch (error) {
-            notification(`⚠️ ${error}.`);
-        }
-
-        notification(`⏳ Awaiting payment for "${products[index].name}"...`);
-        try {
-            const result = await contract.methods.buyProduct(index).send({from: kit.defaultAccount});
-            notification(`🎉 You successfully bought "${products[index].name}".`);
-            getProducts();
-            getBalance();
-
-        } catch (error) {
-            notification(`⚠️ ${error}.`);
-        }
-    }
-})
+formUploadBtn.onclick = addProduct;
