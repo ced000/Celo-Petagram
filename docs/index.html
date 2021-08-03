@@ -10,7 +10,8 @@
 <body>
     <div class="header">
         <h2>Petagram</h2>
-        <span id="balance">30 cUSD</span>
+        <span id="balance"></span>
+        <span id="userID"></span>
     </div>
     <button class="nav-btn" id="prevBtn">👈</button>
     <div class="post-carousel">
@@ -35,14 +36,23 @@
             </div>
         </form>
     </div>
+    <div class="form-container" id="welcomeContainer">
+        <form action="#">
+            <h1>You're New! Welcome! 🤗</h1>
+            <hr>
+            <input type="text" placeholder="Enter a name - Pet names only!😼" id="userPetName">
+            <div class="form-btns">
+                <button class="form-btn" id="createUser">That's it</button>
+            </div>
+        </form>
+    </div>
     <div class="notification">
         <div class="not-text">Testing notification...</div>
         <div class="not-loader-container">
             <div class="not-loader"></div>
         </div>
     </div>
-    <script src="main.js"></script>
-<script type="text/javascript" src="main.js"></script><script type="text/javascript" src="main.js"></script></body>
+<script type="text/javascript" src="main.js"></script></body>
 <footer>
     <p>Made with <i class="fa fa-heart"></i> by DiDi</p>
 </footer>

@@ -38,11 +38,31 @@ body {
     border: 2px solid greenyellow;
 }
 
+span[id="pTag"], span[id="blockies"] {
+    background-color: yellow;
+    padding: 7px;
+    border-radius: 15px;
+    border: 2px solid greenyellow;
+}
+
+.header span[id="userID"] {
+    position: absolute;
+    left: unset;
+    right: 40px;
+    
+}
+
 .header h2 {
     margin: 10px 0;
     padding: 0px;
     font-family: 'Satisfy', cursive;
     font-size: 30px;
+}
+
+.header a {
+    text-decoration: none;
+    color:rgb(33, 154, 230);
+    background: none
 }
 
 .post-carousel {
@@ -273,10 +293,10 @@ hr {
 .notification {
     position: absolute;
     top: 80px;
-    left: -40%;
+    left: -50%;
     background-color: rgb(146, 51, 235);
-    height: 40px;
-    width: 40%;
+    height: auto;
+    width: 50%;
     border-radius: 5px;
     transition: transform 1s ease-in-out;
     color: white;

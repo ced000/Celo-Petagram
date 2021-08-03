@@ -93,8 +93,6 @@ contract Petagram {
                 );
         }
     
-    event check(address indexed sender, address indexed checked);
-    
     function isCreated() public view returns(bool){
         if(addresses.length == 0) return false;
         address _address = msg.sender;
@@ -115,10 +113,11 @@ contract Petagram {
         return true;
     }
     
-    function readUser() public view returns(User memory){
+    function readUser() public view returns(string memory, address){
         if(!isCreated()) revert('User does not exist yet!');
         require(msg.sender == usersMap[msg.sender].user, "Gerraway, You don't own this data!");
-        return (usersMap[msg.sender]);
+        return (usersMap[msg.sender].name,
+                usersMap[msg.sender].user);
     }
         
     
@@ -126,33 +125,39 @@ contract Petagram {
         return postLength;
     }
     
-    function postVoted(uint _counter) public returns(bool) {
+    
+    function postVoted(uint _counter) internal returns(bool) {
         uint _postIndex = posts[_counter].index;
         uint[] storage _postVoted = usersMap[msg.sender].postsVoted;
         if (_postVoted.length > 0) {
             for (uint i = 0; i < _postVoted.length; i++) {
                 if (_postVoted[i] == _postIndex) {
                     usersMap[msg.sender].voted = true;
-                    return usersMap[msg.sender].voted;
+                    return (usersMap[msg.sender].voted);
                 }
             }
         }
         usersMap[msg.sender].voted = false;
-        return usersMap[msg.sender].voted;
+        return (usersMap[msg.sender].voted);
     }
     
-    function postLike(uint _counter) public payable {
+    function postLike(uint _counter) public payable{
+        uint[] storage _postVoted = usersMap[msg.sender].postsVoted;
         if (postVoted(_counter)) revert("Multiple Impressions disallowed");
         require(IERC20Token(cUsdTokenContractAddress).transferFrom(
             msg.sender,
             posts[_counter].owner,
             1e18), "Unable to Tip Post.");
         posts[_counter].likes++;
+        _postVoted.push(posts[_counter].index);
     }
     
-    function postDislike(uint _counter) public payable {
+    function postDislike(uint _counter) public {
+        uint[] storage _postVoted = usersMap[msg.sender].postsVoted;
         if(postVoted(_counter)) revert("Multiple Impressions disallowed");
         posts[_counter].dislikes++;
+        _postVoted.push(posts[_counter].index);
     }
+    
     
 }
