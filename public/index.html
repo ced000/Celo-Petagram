@@ -8,50 +8,53 @@
     <title>Celagram</title>
 </head>
 <body>
-    <div class="header">
-        <h2>Petagram</h2>
-        <span id="balance"></span>
-        <span id="userID"></span>
-    </div>
-    <button class="nav-btn" id="prevBtn">👈</button>
-    <div class="post-carousel">
-        <div class="post-slide" id="postSlide">
-            <p>There are no pets here yet! 😔</p>
-            <!--JS to inject posts here-->
+    <div class="container">
+        <div class="header">
+            <h2>Petagram</h2>
+            <span id="balance"></span>
+            <span id="userID"></span>
+        </div>
+        <button class="nav-btn" id="prevBtn">👈</button>
+        <div class="post-carousel">
+            <div class="post-slide" id="postSlide">
+                <p>There are no pets here yet! 😔</p>
+                <!--JS to inject posts here-->
+            </div>
+        </div>
+        <button class="nav-btn" id="nextBtn">👉</button>
+        <button class="upload-btn" id="upBtn">🚀</button>
+        <div class="form-container" id="formCont">
+            <form action="#">
+                <h1>Pet Upload</h1>
+                <hr>
+                <input type="text"  placeholder="Pet Name" name="" id="petName">
+                <input type="text" placeholder="Pet Image (URL)" id="imgUrl">
+                <input type="text" placeholder="3-word Description" id="desc">
+                <input type="text" placeholder="Owner Social media URL" name="" id="authorHandle">
+                <div class="form-btns">
+                    <button class="form-btn" id="formCancel">Cancel</button>
+                    <button class="form-btn" id="formUpload">Upload</button>
+                </div>
+            </form>
+        </div>
+        <div class="form-container" id="welcomeContainer">
+            <form action="#">
+                <h1>You're New! Welcome! 🤗</h1>
+                <hr>
+                <input type="text" placeholder="Enter a name - Pet names only!😼" id="userPetName">
+                <div class="form-btns">
+                    <button class="form-btn" id="createUser">That's it</button>
+                </div>
+            </form>
+        </div>
+        <div class="notification">
+            <div class="not-text">Testing notification...</div>
+            <div class="not-loader-container">
+                <div class="not-loader"></div>
+            </div>
         </div>
     </div>
-    <button class="nav-btn" id="nextBtn">👉</button>
-    <button class="upload-btn" id="upBtn">🚀</button>
-    <div class="form-container" id="formCont">
-        <form action="#">
-            <h1>Pet Upload</h1>
-            <hr>
-            <input type="text"  placeholder="Pet Name" name="" id="petName">
-            <input type="text" placeholder="Pet Image (URL)" id="imgUrl">
-            <input type="text" placeholder="3-word Description" id="desc">
-            <input type="text" placeholder="Owner Social media URL" name="" id="authorHandle">
-            <div class="form-btns">
-                <button class="form-btn" id="formCancel">Cancel</button>
-                <button class="form-btn" id="formUpload">Upload</button>
-            </div>
-        </form>
-    </div>
-    <div class="form-container" id="welcomeContainer">
-        <form action="#">
-            <h1>You're New! Welcome! 🤗</h1>
-            <hr>
-            <input type="text" placeholder="Enter a name - Pet names only!😼" id="userPetName">
-            <div class="form-btns">
-                <button class="form-btn" id="createUser">That's it</button>
-            </div>
-        </form>
-    </div>
-    <div class="notification">
-        <div class="not-text">Testing notification...</div>
-        <div class="not-loader-container">
-            <div class="not-loader"></div>
-        </div>
-    </div>
+
 </body>
 <footer>
     <p>Made with <i class="fa fa-heart"></i> by DiDi</p>

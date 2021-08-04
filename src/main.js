@@ -4,6 +4,7 @@ import BigNumber from "bignumber.js";
 import petagramAbi from "../contracts/petagram.abi.json";
 import erc20Abi from "../contracts/erc20.abi.json";
 import './style.css';
+import makeBlockie from 'ethereum-blockies-base64';
 
 const ERC20_DECIMALS = 18;
 const petContractAddress = '0xa7f2fe22573C6a4179C92b56c0a9587E99334e62';
@@ -160,14 +161,10 @@ const btnCheck = () => {
 }
 
 function identiconTemplate(_address) {
-    const icon = blockies.create({
-        seed: _address,
-        size: 8,
-        scale: 16
-    }).toDataURL();
+    const icon = makeBlockie(_address);
 
     return `<a href="https://alfajores-blockscout.celo-testnet.org/address/${_address}/transactions" target="_blank">
-    <img src="${icon}" alt="${_address}>
+    <img id="blockieImg" src="${icon}" alt="${_address}"/>
     </a>`;
 }
 
@@ -196,13 +193,15 @@ const renderPost = () => {
                 <small id = "noDislikes">${post.dislikes}</small>
             </li>
             <li>
-                <button>📤</button>
+                <button id="shareBtn">📤</button>
                 <small>Share</small>
             </li>
         </ul>
-        <a href="${post.author}" target="_blank"><span id="blockies">..</span> Author</a>
-        <span id="pTag">$${post.likes}<span>
-
+        <div id="authID">
+            ${identiconTemplate(post.owner)}
+            <a href="${post.author}" target="_blank">Author</a>
+        </div>  
+        <span id="pTag">$${post.likes}</span>
 `
 
 
@@ -321,6 +320,7 @@ const impression = (e) => {
     let index = posts[counter].index;
     if(e.target.tagName.toLowerCase() == 'button' && e.target.id === 'likeBtn' ) upLike(index);
     if(e.target.tagName.toLowerCase() == 'button' && e.target.id === 'dislikeBtn' ) upDislike(index);
+    if(e.target.tagName.toLowerCase() == 'button' && e.target.id === 'shareBtn') notification("Coming soon 🔜");
 }
 
 document.querySelector('#postSlide').onclick = impression;

@@ -7,11 +7,18 @@
 
 body {
     background-image: radial-gradient(circle, #fff, rgb(80, 163, 13));
-    display: flex;
     min-height: 100vh;
+    font-family: "Roboto";
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container {
+    display: flex;
     justify-content: center;
     align-items: center;
-    font-family: "Roboto";
+    width: 70vw;
 }
 
 .header {
@@ -38,7 +45,7 @@ body {
     border: 2px solid greenyellow;
 }
 
-span[id="pTag"], span[id="blockies"] {
+span[id="pTag"] {
     background-color: yellow;
     padding: 7px;
     border-radius: 15px;
@@ -83,6 +90,7 @@ span[id="pTag"], span[id="blockies"] {
     justify-content: center;
     align-items: center;
     transition: transform 0.5s ease-in-out;
+
 }
 
 .post-image {
@@ -146,17 +154,23 @@ small {
     color: #fff;
 }
 
-a {
+#authID {
+    display: flex;
+    flex-direction: row;
     background-color: rgba(64, 224, 208, 0.671);
     border-radius: 5px;
     margin-top: 2px;
-    padding: 10px;
+    padding: 7px;
     width: 60%;
-    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
+
+#authID a {
     text-decoration: none;
     color: white;
     letter-spacing: 2px;
-    /* box-shadow: 0 5px 55px rgba(0, 0, 0, 0.5); */
+    margin-left: 10px;
 }
 
 button {
@@ -322,4 +336,12 @@ hr {
     margin-top: 5px;
     margin-bottom: 0;
     transition: transform 4.7s ease-in-out;
+}
+
+img[id="blockieImg"] {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid yellowgreen;
+    
 }
