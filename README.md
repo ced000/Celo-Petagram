@@ -1,4 +1,4 @@
-# celo-web-dapp
+# Petagram - a Celo Web Dapp
 #### Learning celo-web-dapp development
 ***
 Hello Celo!
