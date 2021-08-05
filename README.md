@@ -2,6 +2,7 @@
 #### Learning celo-web-dapp development
 ***
 Hello Celo!
+![Screenshot (34)](https://user-images.githubusercontent.com/48166371/128304350-7fdb0772-233d-4c52-9ac4-6eea94c5951f.png)
 
 Petagram is an Instagram for pets built on the Celo blockchain. It is built with HTML, CSS, JS and Solidity. It features a slider of the different pets uploaded by different users. The like or thumbs up button allows a user to both like and tip a post. This dislike button only allows a user to 'dislike', no transaction is attached to it for now - a suiting game theory is yet to be found for that. For both cases, multiple impressions are disallowed. The share button is "coming soon", you can click on it to see the "Coming soon notification".
 
@@ -19,16 +20,18 @@ Some improvements noted already.
 
 Bugs noticed - The Github published page, messes up my author blockies. 
 ***
-Live Demo => 
+Live Demo => https://ced000.github.io/Celo-Petagram/
 ***
+
 ## Usage
 ***
+
 #### Requirements
 * Install the CeloExtensionWallet from the Google Chrome Store.
 * Create a wallet.
 * Go to https://celo.org/developers/faucet and get tokens for the alfajores testnet.
 * Switch to the alfajores testnet in the CeloExtensionWallet.
-* 
+
 ***
 ## Project Setup
 #### Install
