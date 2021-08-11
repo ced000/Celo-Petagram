@@ -49,6 +49,20 @@ contract Petagram {
     
     // a list of all the addresses that have visited us. 
     address[] internal addresses;
+
+    // address that deployed the smart contract
+    address internal ownerAddress;
+    
+
+    constructor() {
+     ownerAddress = msg.sender ;
+    }
+    
+    // this modifier ensures only the owner can call certain functions
+    modifier onlyOwner() {
+        require(msg.sender == ownerAddress,"Only owner of the contract can call this function.");
+        _;
+    }
     
     function writePost(
         string memory _title,
@@ -157,6 +171,23 @@ contract Petagram {
         if(postVoted(_counter)) revert("Multiple Impressions disallowed");
         posts[_counter].dislikes++;
         _postVoted.push(posts[_counter].index);
+    }
+    
+       function getOwner() public view returns( address){
+    //   return the  address that deployed this smart contract
+        return (ownerAddress);
+    }
+    
+    // admin functionalities
+    
+    function getAllAddresses() onlyOwner() public view returns( address  [] memory){
+    return addresses;
+    }
+        
+    // get a single user with his address
+    function getSingleUser() onlyOwner() public view returns(string memory, address){
+      return (usersMap[msg.sender].name,
+                usersMap[msg.sender].user);
     }
     
     
